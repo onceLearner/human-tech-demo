@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Link from "next/link"
 
 export default function Home() {
   return (
@@ -18,26 +19,29 @@ export default function Home() {
 
 
         <div className="flex flex-wrap items-center justify-around max-w-4xl mt-6 sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Scrap une annonce specifique &rarr;</h3>
-            <p className="mt-4 text-xl">
 
-              Si vous avez le lien vers l'annonce , Utilisez le pour extraire  les donnees
-            </p>
-          </a>
+          <Link href="/scrap/single">
+            <a
+              className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
+            >
+              <h3 className="text-2xl font-bold">Scrap une annonce specifique &rarr;</h3>
+              <p className="mt-4 text-xl">
 
-          <a
-            href="https://nextjs.org/learn"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Scrap  plusieurs pages &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Obtenez les liens vers des annonces en scrappant les liens vers les pages d'annonce!
-            </p>
-          </a>
+                Si vous avez le lien vers l'annonce , Utilisez le pour extraire  les donnees
+              </p>
+            </a>
+          </Link>
+
+          <Link href="/scrap/multiple">
+            <a
+              className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
+            >
+              <h3 className="text-2xl font-bold">Scrap  plusieurs pages &rarr;</h3>
+              <p className="mt-4 text-xl">
+                Obtenez les liens vers des annonces en scrappant les liens vers les pages d'annonce!
+              </p>
+            </a>
+          </Link>
 
         </div>
       </main>
