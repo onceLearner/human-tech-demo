@@ -9,8 +9,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex flex-col items-center    mt-40 w-full flex-1 px-20 text-center">
-        <h1 className="text-6xl font-bold">
+      <main className="flex flex-col items-center    md:mt-32 mt-10  w-full flex-1 px-20 text-center">
+        <h1 className="md:text-6xl text-2xl  font-bold">
           Demo {" "}
           <a className="text-blue-600" href="https://nextjs.org">
             Scrapping
