@@ -1,7 +1,19 @@
+import axios from 'axios'
 import Head from 'next/head'
 import Link from "next/link"
+import { useEffect } from 'react'
+import { right_url } from '../utils/function'
 
 export default function Home() {
+
+  useEffect(() => {
+
+    axios.get(right_url("/test"))
+      .then(res => console.log({ data: res.data }))
+      .catch(err => console.error({ err }))
+  }, [])
+
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <Head>
@@ -9,7 +21,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex flex-col items-center    md:mt-32 mt-10  w-full flex-1 px-20 text-center">
+      <main className="flex flex-col items-center    md:mt-32 mt-10  w-full flex-1 md:px-20 px-8 text-center">
         <h1 className="md:text-6xl text-2xl  font-bold">
           Demo {" "}
           <a className="text-blue-600" href="https://nextjs.org">
@@ -18,11 +30,11 @@ export default function Home() {
         </h1>
 
 
-        <div className="flex flex-wrap items-center justify-around max-w-4xl mt-6 sm:w-full">
+        <div className="flex flex-wrap items-center justify-around  mt-6 w-full">
 
           <Link href="/scrap/single">
             <a
-              className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
+              className="p-6 mt-6 text-left border md:w-[30rem]  rounded-xl hover:text-blue-600 focus:text-blue-600"
             >
               <h3 className="text-2xl font-bold">Scrap une annonce specifique &rarr;</h3>
               <p className="mt-4 text-xl">
@@ -34,7 +46,7 @@ export default function Home() {
 
           <Link href="/scrap/multiple">
             <a
-              className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
+              className="p-6 mt-6 text-left border  md:w-[30rem]  rounded-xl hover:text-blue-600 focus:text-blue-600"
             >
               <h3 className="text-2xl font-bold">Scrap  plusieurs pages &rarr;</h3>
               <p className="mt-4 text-xl">
