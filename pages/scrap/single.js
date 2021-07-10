@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Head from "next/head"
 import Link from "next/link"
 import axios from 'axios'
-import { right_url } from '../../utils/function'
+import { right_url, save_job } from '../../utils/function'
 import { useRouter } from 'next/dist/client/router'
 
 
@@ -45,6 +45,12 @@ const handle_submit = (e, url, setLoading, setMessage) => {
 
 
 
+
+
+
+
+
+
 const Single = () => {
 
 
@@ -57,6 +63,14 @@ const Single = () => {
         status: null,
         data: null
     })
+
+    const [msg_save_data, setMsg_save_data] = useState({
+        loading: false,
+        status: null,
+        data: " Enregistrer les donnees dans "
+    })
+
+
 
     useEffect(() => {
         if (process.browser) {
@@ -137,21 +151,39 @@ const Single = () => {
                         {
                             message.status == true &&
                             <div>
-                                <p>success</p>
 
-                                <p>Data scrapped:</p>
+                                <div className="flex border-b   justify-evenly items-center py-4 ">
 
-                                <div className="flex flex-col ">
+                                    <p className="text-green-600 text-sm ">succes!</p>
+
+                                    <button
+
+                                        disabled={msg_save_data.status}
+                                        onClick={() => save_job(message.data, setMsg_save_data)}
+
+                                        className={`${msg_save_data.status == null && 'bg-blue-600'}   ${msg_save_data.status == true && 'bg-green-600'}  ${msg_save_data.status == false && 'bg-red-600'}  hover:opacity-60 font-medium text-sm md:text-base  rounded-lg p-2 text-gray-100 `}>
+                                        {
+                                            msg_save_data.loading ?
+                                                'saving...'
+                                                :
+                                                msg_save_data.data
+                                        }
+
+
+
+                                    </button>
+                                </div>
+                                <div className="flex flex-col space-y-3  py-5">
                                     {Object.keys(message.data).map(item => (
-                                        <div className="flex  items-center space-x-6">
-                                            <p className="text-sm text-gray-600 ">{item}</p>
+                                        <div className="flex   space-x-6 ">
+                                            <p className=" text-gray-400 ">{item}:</p>
                                             <div>
                                                 {
                                                     (typeof message.data[item] === 'object' && message.data[item] !== null)
                                                         ?
                                                         Object.keys(message.data[item]).map(elt => (
                                                             <span
-                                                                className="flex  items-center space-x-6"
+                                                                className="flex  items-center space-x-3"
                                                             >
                                                                 <p className="text-sm text-gray-600">{elt}</p>
                                                                 <p>{message.data[item][elt]}</p>

@@ -12,7 +12,13 @@ import { right_url } from '../../utils/function'
 * @param {Number} number_of_pages 
 */
 
-const scrap_refs = (is_by_number_of_pages, number_of_pages, number_of_jobs, setLoading, setMessage) => {
+const scrap_refs = (is_by_number_of_pages, number_of_pages, number_of_jobs, setLoading, setMessage, setMsg_save_data) => {
+
+    setMsg_save_data({
+        loading: false,
+        status: null,
+        data: " Enregistrer dans la Base de donnees"
+    })
 
 
     console.log({ number_of_jobs })
@@ -48,15 +54,70 @@ const scrap_refs = (is_by_number_of_pages, number_of_pages, number_of_jobs, setL
 
 
 
+const save_N_jobs = (data, setMsg_save_data) => {
+    setMsg_save_data({
+        loading: true,
+        status: null,
+        data: ''
+    })
+
+    let a = 0;
+    for (let index = 0; index < data.length; index++) {
+        axios.get(right_url("/scrap/oneJob?url=https://emploi.ma" + data[index]))
+            .then(res => {
+
+                axios.post(right_url("/emploi/jobs"), res.data)
+                    .then(response => {
+                        console.log({ response })
+                        a++;
+                        console.log({ a })
+                        if (a === (data.length)) {
+                            console.log("terminie")
+                            setMsg_save_data({
+                                loading: false,
+                                status: true,
+                                data: 'saved!'
+                            })
+
+                        }
+
+                    })
+
+                    .catch(error => console.error({ error }))
+
+
+            })
+            .catch(er => {
+
+                console.error({ er })
+            }
+            )
+
+
+
+
+    }
+
+
+
+}
+
+
 const Multiple = () => {
 
     const [number_of_pages, setNumber_of_pages] = useState(1)
-    const [scrap_type, setScrap_type] = useState(1)
+    const [scrap_type, setScrap_type] = useState(2)
     const [number_of_jobs, setNumber_of_jobs] = useState(1)
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState({
         status: null,
         data: null
+    })
+
+    const [msg_save_data, setMsg_save_data] = useState({
+        loading: false,
+        status: null,
+        data: " Enregistrer dans la Base de donnees"
     })
 
     return (
@@ -79,18 +140,20 @@ const Multiple = () => {
 
                     <h1 className="text-lg md:text-2xl font-medium text-gray-800 md:p-6   mb-5  "> Scrapper  plusieurs pages, plusieurs annonces</h1>
 
-                    <div className="flex space-x-6 items-center  ">
+                    <div className="flex space-x-6 items-center ">
+                        <input type="radio" checked={scrap_type == 2} onClick={() => setScrap_type(2)}></input>
+
+                        <h2 className="text-gray-500 ">Scrapper " N " dernieres annonces</h2>
+                    </div>
+
+                    <div className="flex space-x-6 items-center  mb-8  pt-2">
                         <input type="radio" checked={scrap_type == 1} onClick={() => setScrap_type(1)}></input>
                         <h2 className="text-gray-500 ">Scrapper par nombre de pages</h2>
 
 
                     </div>
 
-                    <div className="flex space-x-6 items-center pt-1 mb-8">
-                        <input type="radio" checked={scrap_type == 2} onClick={() => setScrap_type(2)}></input>
 
-                        <h2 className="text-gray-500 ">Scrapper " N " nouvelles annonces</h2>
-                    </div>
                     {
                         scrap_type == 1 ?
                             <div className="flex  flex-wrap md:space-y-0    space-y-4 space-x-4 items-center text-gray-800">
@@ -101,7 +164,7 @@ const Multiple = () => {
 
                                 <button
                                     type="submit"
-                                    onClick={() => scrap_refs(true, number_of_pages, 0, setLoading, setMessage)}
+                                    onClick={() => scrap_refs(true, number_of_pages, 0, setLoading, setMessage, setMsg_save_data)}
 
                                     className="bg-gray-800   hover:opacity-60 font-medium text-sm md:text-base   rounded-lg p-3 px-5 text-gray-200 ">
                                     Scrap!
@@ -118,7 +181,7 @@ const Multiple = () => {
 
                                 <button
                                     type="submit"
-                                    onClick={() => scrap_refs(false, number_of_pages, number_of_jobs, setLoading, setMessage)}
+                                    onClick={() => scrap_refs(false, number_of_pages, number_of_jobs, setLoading, setMessage, setMsg_save_data)}
 
 
                                     className="bg-gray-800   hover:opacity-60 font-medium text-sm md:text-base   rounded-lg p-3 px-5 text-gray-200 ">
@@ -142,20 +205,57 @@ const Multiple = () => {
                         </div>
                     }
 
-                    <div className="flex flex-col items-center  p-6 space-y-3">
+                    <div >
                         {
                             message.status &&
-                            message.data.map(item => (
-                                <div className="flex justify-between text-sm text-gray-700 border md:w-80 bg-gray-100 rounded-md p-2  ">
 
-                                    <p> annonce ref #{item.split("/")[2].split("-")[item.split("/")[2].split("-").length - 1]}</p>
+                            <div className="flex flex-col items-center  p-6 space-y-3">
 
-                                    <Link href={`/scrap/single?url=https://emploi.ma${item}`}>
-                                        <a className="text-blue-600 hover:opacity-60"> extraire data</a>
-                                    </Link>
+
+                                {
+                                    message.data.map(item => (
+                                        <div className="flex justify-between text-sm text-gray-700 border md:w-80 bg-gray-100 rounded-md p-2  ">
+
+                                            <p> annonce ref #{item.split("/")[2].split("-")[item.split("/")[2].split("-").length - 1]}</p>
+
+                                            <Link href={`/scrap/single?url=https://emploi.ma${item}`}>
+                                                <a className="text-blue-600 hover:opacity-60 underline"> extraire puis save Data</a>
+                                            </Link>
+
+
+                                        </div>
+                                    ))
+                                }
+
+                                <div className="buttonSave py-10">
+                                    <button
+
+                                        disabled={msg_save_data.status}
+                                        onClick={() => save_N_jobs(message.data, setMsg_save_data)}
+
+                                        className={`${msg_save_data.status == null && 'bg-blue-600'}   ${msg_save_data.status == true && 'bg-green-600'}  ${msg_save_data.status == false && 'bg-red-600'}  hover:opacity-60 font-medium text-sm md:text-base  rounded-lg p-2   text-gray-100 `}>
+                                        {
+                                            msg_save_data.loading ?
+                                                'saving...'
+                                                :
+                                                msg_save_data.data
+                                        }
+
+
+
+                                    </button>
+
                                 </div>
-                            ))
+
+
+
+
+                            </div>
+
+
+
                         }
+
 
 
                     </div>
