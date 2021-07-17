@@ -12,7 +12,7 @@ export const right_url = (ext) => {
         remote: "https://human-tech.herokuapp.com"
     }
 
-    return url.local + ext
+    return url.remote + ext
 }
 
 
