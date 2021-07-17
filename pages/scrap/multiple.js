@@ -3,7 +3,7 @@ import Head from "next/head"
 import Link from "next/link"
 import axios from 'axios'
 import { right_url } from '../../utils/function'
-
+import Select from "react-select"
 
 
 /**
@@ -12,7 +12,7 @@ import { right_url } from '../../utils/function'
 * @param {Number} number_of_pages 
 */
 
-const scrap_refs = (is_by_number_of_pages, number_of_pages, number_of_jobs, setLoading, setMessage, setMsg_save_data) => {
+const scrap_refs = (is_by_number_of_pages, number_of_pages, number_of_jobs, scrapped_website, setLoading, setMessage, setMsg_save_data) => {
 
     setMsg_save_data({
         loading: false,
@@ -30,7 +30,7 @@ const scrap_refs = (is_by_number_of_pages, number_of_pages, number_of_jobs, setL
     setLoading(true)
 
 
-    axios.get(right_url(`/scrap/${is_by_number_of_pages ? 'multiplePages' : 'multipleJobs'}?number=${is_by_number_of_pages ? number_of_pages : number_of_jobs}`))
+    axios.get(right_url(`/${scrapped_website.value}/scrap/${is_by_number_of_pages ? 'multiplePages' : 'multipleJobs'}?number=${is_by_number_of_pages ? number_of_pages : number_of_jobs}`))
         .then(res => {
             setMessage({
                 status: true,
@@ -103,6 +103,14 @@ const save_N_jobs = (data, setMsg_save_data) => {
 }
 
 
+
+const options = [
+    { value: 'rekrute', label: 'rekrute.com' },
+    { value: 'emploi', label: 'emploi.ma' },
+]
+
+
+
 const Multiple = () => {
 
     const [number_of_pages, setNumber_of_pages] = useState(1)
@@ -119,6 +127,14 @@ const Multiple = () => {
         status: null,
         data: " Enregistrer dans la Base de donnees"
     })
+
+
+    const [scrapped_website, setScrapped_website] = useState({
+        value: "rekrute",
+        label: "rekrute.com"
+    })
+
+
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen py-2">
@@ -139,6 +155,15 @@ const Multiple = () => {
 
 
                     <h1 className="text-lg md:text-2xl font-medium text-gray-800 md:p-6   mb-5  "> Scrapper  plusieurs pages, plusieurs annonces</h1>
+
+                    <div className=" flex md:flex-row md:items-center md:space-x-9  flex-col items-start py-6">
+                        <span className="text-gray-500 ">choisir le siteweb</span>
+                        <Select value={scrapped_website}
+                            className="md:w-72 w-full "
+                            options={options} onChange={(val) => setScrapped_website(val)} />
+
+                    </div>
+
 
                     <div className="flex space-x-6 items-center ">
                         <input type="radio" checked={scrap_type == 2} onClick={() => setScrap_type(2)}></input>
@@ -164,7 +189,7 @@ const Multiple = () => {
 
                                 <button
                                     type="submit"
-                                    onClick={() => scrap_refs(true, number_of_pages, 0, setLoading, setMessage, setMsg_save_data)}
+                                    onClick={() => scrap_refs(true, number_of_pages, 0, scrapped_website, setLoading, setMessage, setMsg_save_data)}
 
                                     className="bg-gray-800   hover:opacity-60 font-medium text-sm md:text-base   rounded-lg p-3 px-5 text-gray-200 ">
                                     Scrap!
@@ -181,7 +206,7 @@ const Multiple = () => {
 
                                 <button
                                     type="submit"
-                                    onClick={() => scrap_refs(false, number_of_pages, number_of_jobs, setLoading, setMessage, setMsg_save_data)}
+                                    onClick={() => scrap_refs(false, number_of_pages, number_of_jobs, scrapped_website, setLoading, setMessage, setMsg_save_data)}
 
 
                                     className="bg-gray-800   hover:opacity-60 font-medium text-sm md:text-base   rounded-lg p-3 px-5 text-gray-200 ">
@@ -216,10 +241,10 @@ const Multiple = () => {
                                     message.data.map(item => (
                                         <div className="flex justify-between text-sm text-gray-700 border md:w-80 bg-gray-100 rounded-md p-2  ">
 
-                                            <p> annonce ref #{item.split("/")[2].split("-")[item.split("/")[2].split("-").length - 1]}</p>
+                                            <p> annonce ref #{item.split("-")[item.split("-").length - 1]}</p>
 
-                                            <Link href={`/scrap/single?url=https://emploi.ma${item}`}>
-                                                <a className="text-blue-600 hover:opacity-60 underline"> extraire puis save Data</a>
+                                            <Link href={`/scrap/single?url=https://${scrapped_website.value == "emploi" ? "www.emploi.ma" : "www.rekrute.com"}${item}`}>
+                                                <a className="text-blue-600 px-4 hover:opacity-60 underline"> extraire puis save Data</a>
                                             </Link>
 
 

@@ -24,10 +24,13 @@ export default function Home() {
       <main className="flex flex-col items-center    md:mt-32 mt-10  w-full flex-1 md:px-20 px-8 text-center">
         <h1 className="md:text-6xl text-2xl  font-bold">
           Demo {" "}
-          <a className="text-blue-600" href="https://nextjs.org">
+          <a className="text-blue-600" href="#">
             Scrapping
           </a>
+
         </h1>
+
+        <span className="text-gray-600 p-4 font-medium"> happy Eid &#128017;</span>
 
 
         <div className="flex flex-wrap items-center justify-around  mt-6 w-full">

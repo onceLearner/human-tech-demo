@@ -20,7 +20,11 @@ const handle_submit = (e, url, setLoading, setMessage) => {
         data: null
     })
     setLoading(true)
-    axios.get(right_url("/scrap/oneJob?url=" + url))
+
+    let website = url.includes("rekrute") ? "/rekrute" : "/emploi"
+    console.log(website)
+
+    axios.get(right_url(website + "/scrap/oneJob?url=" + url))
         .then(res => {
             setMessage({
                 status: true,
@@ -51,6 +55,7 @@ const handle_submit = (e, url, setLoading, setMessage) => {
 
 
 
+
 const Single = () => {
 
 
@@ -69,6 +74,9 @@ const Single = () => {
         status: null,
         data: " Enregistrer les donnees dans "
     })
+
+
+
 
 
 
@@ -102,13 +110,13 @@ const Single = () => {
 
                 <div className="flex flex-col space-y-9 items-center w-full py-10  md:p-10 text-center p-2">
 
-                    <h1 className="text-lg md:text-2xl font-medium text-gray-=800 "> Scrapper les donnees relatives a une annonce particulier </h1>
-
+                    <h1 className="text-lg md:text-2xl font-medium text-gray-800 "> Scrapper les donnees relatives a une annonce particulier </h1>
+                    <h2 className="text-gray-500 text-sm">Unique input field, accepts URLs from Rekrute and Emploi.ma</h2>
                     <form onSubmit={(e) => handle_submit(e, url, setLoading, setMessage)} className="flex  md:flex-row md:border flex-col items-center md:space-y-0 space-y-9  justify-between rounded-lg w-full md:w-4/5 ">
 
 
                         <input value={url}
-                            required onChange={(e) => setUrl(e.target.value)} className="rounded-lg md:border-0 border p-3 flex-auto md:w-auto w-full" placeholder="lien vers la page d'annonce" />
+                            required onChange={(e) => setUrl(e.target.value)} className="rounded-lg md:border-0 border p-3 flex-auto md:w-auto w-full" placeholder="lien vers la page d'annonce emploi.ma ou rekrute.com" />
 
                         <button
                             type="submit"
